@@ -1,0 +1,124 @@
+/* ===== General Layout ===== */
+body {
+    background-color: #121212;
+    color: #ffffff;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+/* ===== Header ===== */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo {
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+/* ===== Result Card ===== */
+.result-card {
+    background-color: #1e1e1e;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+/* ===== Performance Summary ===== */
+.performance-summary {
+    text-align: center;
+}
+
+.score-circle {
+    width: 130px;
+    height: 130px;
+    margin: 20px auto;
+    background-color: #2e2e2e;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid #4caf50;
+}
+
+.score {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #4caf50;
+}
+
+.level-description {
+    font-size: 1.2em;
+    margin-top: 10px;
+}
+
+/* ===== Progress Bar ===== */
+.progress-bar-container {
+    background-color: #333;
+    border-radius: 10px;
+    height: 20px;
+    margin: 25px auto;
+    width: 90%;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #4caf50;
+    transition: width 0.5s ease;
+}
+
+.overall-feedback {
+    margin-top: 15px;
+    font-weight: 500;
+    color: #ccc;
+}
+
+/* ===== Advice Section ===== */
+.advice-section {
+    margin-top: 35px;
+}
+
+.advice-section h3 {
+    font-size: 1.3em;
+    margin-bottom: 10px;
+    color: #66ffcc;
+}
+
+.advice-section ul {
+    padding-left: 20px;
+}
+
+.advice-section li {
+    margin-bottom: 10px;
+    color: #eee;
+}
+
+/* ===== Actions (Button) ===== */
+.actions {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.btn {
+    background-color: #4caf50;
+    color: white;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background-color: #45a049;
+}

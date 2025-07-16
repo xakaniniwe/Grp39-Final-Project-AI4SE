@@ -44,6 +44,6 @@ print("Model saved as student_grade_model.pkl")
 
 # prompt: download model
 
-from google.colab import files
+#from google.colab import files
 
-files.download('student_grade_model.pkl')
+#files.download('student_grade_model.pkl')

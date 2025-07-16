@@ -1,15 +1,25 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, flash
 import joblib
 import numpy as np
+import logging
 
 app = Flask(__name__)
+app.secret_key = 'f2e4a871d9c6b3f7a0e1d2c3b4f56789'  # Needed for flashing messages
 
-# Load the trained model
-model = joblib.load('student_grade_model.pkl')
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
-# Define mentors for subjects
+# Load the trained model once when app starts
+try:
+    model = joblib.load('student_grade_model.pkl')
+    app.logger.info("Model loaded successfully.")
+except Exception as e:
+    app.logger.error(f"Error loading model: {e}")
+    model = None
+
+# Mentors dictionary
 mentors = {
-    "Maths": {"name": "Sipho Nkosi", "email": "sipho.nkosi@example.com"},
+    "Mathematics": {"name": "Sipho Nkosi", "email": "sipho.nkosi@gmail.com"},
     "Physical Science": {"name": "Thandi Mthembu", "email": "thandi.mthembu@example.com"},
     "Life Sciences": {"name": "Lebo Molefe", "email": "lebo.molefe@example.com"},
     "English": {"name": "John Smith", "email": "john.smith@example.com"},
@@ -21,53 +31,51 @@ mentors = {
     "Afrikaans": {"name": "Pieter van der Merwe", "email": "pieter.vdm@example.com"}
 }
 
+def map_percentage_to_level(percentage):
+    if percentage >= 80:
+        return 7, "Outstanding Achievement"
+    elif percentage >= 70:
+        return 6, "Meritorious Achievement"
+    elif percentage >= 60:
+        return 5, "Substantial Achievement"
+    elif percentage >= 50:
+        return 4, "Moderate Achievement"
+    elif percentage >= 40:
+        return 3, "Adequate Achievement"
+    elif percentage >= 30:
+        return 2, "Elementary Achievement"
+    else:
+        return 1, "Not Achieved"
+
 @app.route('/')
 def home():
     return render_template('index.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    if model is None:
+        flash("Model is not loaded, please try again later.", "error")
+        return redirect(url_for('home'))
+
     try:
-        # General study info
+        # Validate and parse inputs
         studytime = float(request.form['studytime'])
         failures = float(request.form['failures'])
         absences = float(request.form['absences'])
-        schoolsup = 1 if request.form.get('schoolsup') == 'yes' else 0
-        famsup = 1 if request.form.get('famsup') == 'yes' else 0
+        schoolsup = 1 if request.form.get('schoolsup', 'no') == 'yes' else 0
+        famsup = 1 if request.form.get('famsup', 'no') == 'yes' else 0
         goout = float(request.form['goout'])
 
-        # Predict using ML model
         features = np.array([[studytime, failures, absences, schoolsup, famsup, goout]])
         predicted_grade = model.predict(features)[0]
         percentage_grade = round((predicted_grade / 20) * 100, 1)
 
-        # Determine CAPS Level for predicted grade
-        if percentage_grade >= 80:
-            level = 7
-            level_description = "Outstanding Achievement"
-        elif percentage_grade >= 70:
-            level = 6
-            level_description = "Meritorious Achievement"
-        elif percentage_grade >= 60:
-            level = 5
-            level_description = "Substantial Achievement"
-        elif percentage_grade >= 50:
-            level = 4
-            level_description = "Moderate Achievement"
-        elif percentage_grade >= 40:
-            level = 3
-            level_description = "Adequate Achievement"
-        elif percentage_grade >= 30:
-            level = 2
-            level_description = "Elementary Achievement"
-        else:
-            level = 1
-            level_description = "Not Achieved"
+        level, level_description = map_percentage_to_level(percentage_grade)
 
-        # Build general study advice
         advice_list = []
+        # General advice rules
         if studytime <= 2:
-            advice_list.append("Try to increase your study time to at least 3 or 4.")
+            advice_list.append("Try to increase your study time to at least 3 or 4 hours per week.")
         if absences > 5:
             advice_list.append("Reducing your absences can help improve your score.")
         if failures > 0:
@@ -77,43 +85,47 @@ def predict():
         if schoolsup == 0:
             advice_list.append("Consider asking for extra school support if available.")
 
-        # Handle subject inputs - LEVELS
+        # Handle subject-specific CAPS levels
         subject_names = [
             request.form['subject1'],
             request.form['subject2'],
-            request.form['subject3']
+            request.form['subject3'],
+            request.form['subject4']
         ]
         subject_levels = [
             int(request.form['grade1']),
             int(request.form['grade2']),
-            int(request.form['grade3'])
+            int(request.form['grade3']),
+            int(request.form['grade4']) 
         ]
 
-        # Subject-specific advice based on level
-        for name, level_input in zip(subject_names, subject_levels):
+        for subject, level_input in zip(subject_names, subject_levels):
             if level_input <= 3:
-                message = f"Your level in {name} is Level {level_input}. Consider improving in this subject."
-                mentor = mentors.get(name)
+                msg = f"Your level in {subject} is Level {level_input}. Consider improving in this subject."
+                mentor = mentors.get(subject)
                 if mentor:
-                    message += f" Contact Mentor: {mentor['name']} (Email: {mentor['email']})."
-                advice_list.append(message)
+                    msg += f" Contact Mentor: {mentor['name']} (Email: {mentor['email']})."
+                advice_list.append(msg)
             else:
-                advice_list.append(f"Good job in {name} with Level {level_input}!")
+                advice_list.append(f"Good job in {subject} with Level {level_input}!")
 
-        # Overall pass/fail message
-        if level >= 4:
-            overall_message = "Good job! You're on track to pass."
-        else:
-            overall_message = "Consider more study time or extra help to improve."
+        overall_message = "Good job! You're on track to pass." if level >= 4 else "Consider more study time or extra help to improve."
 
-        return render_template('result.html',
-                               percentage=percentage_grade,
-                               level=level,
-                               level_description=level_description,
-                               overall=overall_message,
-                               advice_list=advice_list)
+        # Log prediction
+        app.logger.info(f"Prediction done: Grade={predicted_grade:.2f}, Percentage={percentage_grade}%, Level={level}")
+
+        return render_template(
+            'result.html',
+            percentage=percentage_grade,
+            level=level,
+            level_description=level_description,
+            overall=overall_message,
+            advice_list=advice_list
+        )
     except Exception as e:
-        return f"Error: {e}"
+        app.logger.error(f"Error during prediction: {e}")
+        flash("An error occurred while processing your request. Please check your inputs and try again.", "error")
+        return redirect(url_for('home'))
 
 if __name__ == '__main__':
     app.run(debug=True)

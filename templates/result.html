@@ -1,24 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
     <title>Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
-<div style="background-color: #f0f0f0; padding: 20px; border-radius: 8px;">
-    <h1>Predicted Achievement</h1>
-    <p><strong>Level:</strong> {{ level }}</p>
-    <p><strong>Description:</strong> {{ level_description }}</p>
-    <p><strong>Approximate Percentage:</strong> {{ percentage }}%</p>
-</div>
-    <p>{{ overall }}</p>
 
-    <h2>Personalized Recommendations:</h2>
-    <ul>
-        {% for item in advice_list %}
-            <li>{{ item }}</li>
-        {% endfor %}
-    </ul>
+<body class="dark-theme">
+    <div class="container">
+        <header>
+            <h1>Student Performance Results</h1>
+        </header>
 
-    <a href="/">Try Again</a>
+        <section class="result-card">
+            <div class="performance-summary">
+                <h2>Predicted Performance</h2>
+                <div class="score-visual">
+                    <div class="score-circle">
+                        <span class="score">{{ percentage }}%</span>
+                    </div>
+                    <p class="level-description">Level {{ level }}: {{ level_description }}</p>
+                </div>
+
+                <!-- Visual Progress Indicator -->
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: {{ percentage|round(1) }}%;"></div>
+                </div>
+
+                <p class="overall-feedback">{{ overall }}</p>
+            </div>
+
+            <div class="advice-section">
+                <h3>Personalized Advice & Subject Support</h3>
+                <ul>
+                    {% for item in advice_list %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="actions">
+                <a href="/" class="btn">Try Again</a>
+            </div>
+        </section>
+    </div>
 </body>
+
 </html>
