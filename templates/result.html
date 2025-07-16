@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction Result</title>
+</head>
+<body>
+<div style="background-color: #f0f0f0; padding: 20px; border-radius: 8px;">
+    <h1>Predicted Achievement</h1>
+    <p><strong>Level:</strong> {{ level }}</p>
+    <p><strong>Description:</strong> {{ level_description }}</p>
+    <p><strong>Approximate Percentage:</strong> {{ percentage }}%</p>
+</div>
+    <p>{{ overall }}</p>
+
+    <h2>Personalized Recommendations:</h2>
+    <ul>
+        {% for item in advice_list %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="/">Try Again</a>
+</body>
+</html>

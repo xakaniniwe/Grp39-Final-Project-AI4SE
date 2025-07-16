@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Performance Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        p.help-text {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        input[type="submit"] {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student Performance Predictor</h1>
+    <form action="/predict" method="post">
+        <h2>General Study Info</h2>
+
+        <label>Study Time (1-4):
+            <p class="help-text">1 = &lt;2 hrs/week, 4 = 10+ hrs/week</p>
+            <input type="number" name="studytime" min="1" max="4" required>
+        </label>
+
+        <label>Failures:
+            <input type="number" name="failures" min="0" max="4" required>
+        </label>
+
+        <label>Absences:
+            <input type="number" name="absences" min="0" required>
+        </label>
+
+        <label>School Support:
+            <select name="schoolsup">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+        </label>
+
+        <label>Family Support:
+            <select name="famsup">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+        </label>
+
+        <label>Going Out Frequency (1-5):
+            <input type="number" name="goout" min="1" max="5" required>
+        </label>
+
+        <h2>Subjects and CAPS Levels</h2>
+
+        <!-- Subject 1 -->
+        <label>Subject 1 Name:
+            <select name="subject1" required>
+                <option value="">--Select Subject--</option>
+                <option>Maths</option>
+                <option>Physical Science</option>
+                <option>Life Sciences</option>
+                <option>English</option>
+                <option>Geography</option>
+                <option>History</option>
+                <option>Business Studies</option>
+                <option>Accounting</option>
+                <option>Economics</option>
+                <option>Afrikaans</option>
+            </select>
+        </label>
+        <label>Subject 1 Level:
+            <select name="grade1" required>
+                <option value="">--Select Level--</option>
+                <option value="1">Level 1 - Not Achieved (0–29%)</option>
+                <option value="2">Level 2 - Elementary Achievement (30–39%)</option>
+                <option value="3">Level 3 - Adequate Achievement (40–49%)</option>
+                <option value="4">Level 4 - Moderate Achievement (50–59%)</option>
+                <option value="5">Level 5 - Substantial Achievement (60–69%)</option>
+                <option value="6">Level 6 - Meritorious Achievement (70–79%)</option>
+                <option value="7">Level 7 - Outstanding Achievement (80–100%)</option>
+            </select>
+        </label>
+
+        <!-- Subject 2 -->
+        <label>Subject 2 Name:
+            <select name="subject2" required>
+                <option value="">--Select Subject--</option>
+                <option>Maths</option>
+                <option>Physical Science</option>
+                <option>Life Sciences</option>
+                <option>English</option>
+                <option>Geography</option>
+                <option>History</option>
+                <option>Business Studies</option>
+                <option>Accounting</option>
+                <option>Economics</option>
+                <option>Afrikaans</option>
+            </select>
+        </label>
+        <label>Subject 2 Level:
+            <select name="grade2" required>
+                <option value="">--Select Level--</option>
+                <option value="1">Level 1 - Not Achieved (0–29%)</option>
+                <option value="2">Level 2 - Elementary Achievement (30–39%)</option>
+                <option value="3">Level 3 - Adequate Achievement (40–49%)</option>
+                <option value="4">Level 4 - Moderate Achievement (50–59%)</option>
+                <option value="5">Level 5 - Substantial Achievement (60–69%)</option>
+                <option value="6">Level 6 - Meritorious Achievement (70–79%)</option>
+                <option value="7">Level 7 - Outstanding Achievement (80–100%)</option>
+            </select>
+        </label>
+
+        <!-- Subject 3 -->
+        <label>Subject 3 Name:
+            <select name="subject3" required>
+                <option value="">--Select Subject--</option>
+                <option>Maths</option>
+                <option>Physical Science</option>
+                <option>Life Sciences</option>
+                <option>English</option>
+                <option>Geography</option>
+                <option>History</option>
+                <option>Business Studies</option>
+                <option>Accounting</option>
+                <option>Economics</option>
+                <option>Afrikaans</option>
+            </select>
+        </label>
+        <label>Subject 3 Level:
+            <select name="grade3" required>
+                <option value="">--Select Level--</option>
+                <option value="1">Level 1 - Not Achieved (0–29%)</option>
+                <option value="2">Level 2 - Elementary Achievement (30–39%)</option>
+                <option value="3">Level 3 - Adequate Achievement (40–49%)</option>
+                <option value="4">Level 4 - Moderate Achievement (50–59%)</option>
+                <option value="5">Level 5 - Substantial Achievement (60–69%)</option>
+                <option value="6">Level 6 - Meritorious Achievement (70–79%)</option>
+                <option value="7">Level 7 - Outstanding Achievement (80–100%)</option>
+            </select>
+        </label>
+
+        <input type="submit" value="Predict Grade">
+    </form>
+</body>
+</html>
