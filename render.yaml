@@ -1,6 +1,7 @@
 services:
   - type: web
-    name: SakhaSonke
+    name: your-app-name
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
+    runtime: python3.11
