@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: SakhaSonke
+    env: python
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    runtime: python-3.10
+    plan: free
+    branch: main
+    autoDeploy: true
