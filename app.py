@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import joblib
 import numpy as np
 import logging
+import os
 
 app = Flask(__name__)
 app.secret_key = 'f2e4a871d9c6b3f7a0e1d2c3b4f56789'  # Needed for flashing messages
@@ -128,4 +129,4 @@ def predict():
         return redirect(url_for('home'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
