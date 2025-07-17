@@ -1,7 +1,7 @@
 # Grp39-Final-Project-AI4SE
 # 🌍 Sakha Sonke: Student Performance Predictor
 
-**"Sakha Sonke"** means *"We Build Together"* — this AI-powered project predicts student academic performance and gives personalized, CAPS-aligned feedback and mentorship advice to help learners succeed in South Africa’s diverse school system.
+**"Sakha Sonke"** means *"We Build Together"* — this AI-powered project predicts student academic performance and gives personalized, CAPS-aligned feedback and mentorship advice to help learners succeed in South Africa’s diverse school system. Live link: https://sakhasonkepred.up.railway.app/predict
 
 ---
 
